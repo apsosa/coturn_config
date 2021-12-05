@@ -19,27 +19,26 @@ If the value is missed, then it means 'true'.
 #
 #listening-port=3478
 
-# TURN listener port for TLS (Default: 5349).
-# Note: actually, "plain" TCP & UDP sessions can connect to the TLS & DTLS
-# port(s), too - if allowed by configuration. The TURN server 
-# "automatically" recognizes the type of traffic. Actually, two listening
-# endpoints (the "plain" one and the "tls" one) are equivalent in terms of
-# functionality; but we keep both endpoints to satisfy the RFC 5766 specs.
-# For secure TCP connections, we currently support SSL version 3 and 
-# TLS version 1.0, 1.1 and 1.2.
-# For secure UDP connections, we support DTLS version 1.
-#
+TURN listener port for TLS (Default: 5349).
+Note: actually, "plain" TCP & UDP sessions can connect to the TLS & DTLS
+port(s), too - if allowed by configuration. The TURN server 
+"automatically" recognizes the type of traffic. Actually, two listening
+endpoints (the "plain" one and the "tls" one) are equivalent in terms of
+functionality; but we keep both endpoints to satisfy the RFC 5766 specs.
+For secure TCP connections, we currently support SSL version 3 and 
+TLS version 1.0, 1.1 and 1.2.
+For secure UDP connections, we support DTLS version 1.
 #tls-listening-port=5349
 
-# Alternative listening port for UDP and TCP listeners;
-# default (or zero) value means "listening port plus one". 
-# This is needed for RFC 5780 support
-# (STUN extension specs, NAT behavior discovery). The TURN Server 
-# supports RFC 5780 only if it is started with more than one 
-# listening IP address of the same family (IPv4 or IPv6).
-# RFC 5780 is supported only by UDP protocol, other protocols
-# are listening to that endpoint only for "symmetry".
-#
+ Alternative listening port for UDP and TCP listeners;
+ default (or zero) value means "listening port plus one". 
+ This is needed for RFC 5780 support
+ (STUN extension specs, NAT behavior discovery). The TURN Server 
+ supports RFC 5780 only if it is started with more than one 
+ listening IP address of the same family (IPv4 or IPv6).
+ RFC 5780 is supported only by UDP protocol, other protocols
+ are listening to that endpoint only for "symmetry".
+
 #alt-listening-port=0
 							 
 # Alternative listening port for TLS and DTLS protocols.
@@ -55,29 +54,28 @@ If the value is missed, then it means 'true'.
 #listening-ip=10.207.21.238
 #listening-ip=2607:f0d0:1002:51::4
 
-# Auxiliary STUN/TURN server listening endpoint.
-# Aux servers have almost full TURN and STUN functionality.
-# The (minor) limitations are:
-#
-# 1) Auxiliary servers do not have alternative ports and
-# they do not support STUN RFC 5780 functionality (CHANGE REQUEST).
-#
-# 2) Auxiliary servers also are never returning ALTERNATIVE-SERVER reply.
-# 
-# Valid formats are 1.2.3.4:5555 for IPv4 and [1:2::3:4]:5555 for IPv6.
-#
-# There may be multiple aux-server options, each will be used for listening
-# to client requests.
-#
+Auxiliary STUN/TURN server listening endpoint.
+Aux servers have almost full TURN and STUN functionality.
+The (minor) limitations are:
+
+1) Auxiliary servers do not have alternative ports and
+they do not support STUN RFC 5780 functionality (CHANGE REQUEST).
+
+2) Auxiliary servers also are never returning ALTERNATIVE-SERVER reply.
+
+Valid formats are 1.2.3.4:5555 for IPv4 and [1:2::3:4]:5555 for IPv6.
+
+There may be multiple aux-server options, each will be used for listening
+to client requests.
+
 #aux-server=172.17.19.110:33478
 #aux-server=[2607:f0d0:1002:51::4]:33478
 
-# (recommended for older Linuxes only)
-# Automatically balance UDP traffic over auxiliary servers (if configured).
-# The load balancing is using the ALTERNATE-SERVER mechanism.
-# The TURN client must support 300 ALTERNATE-SERVER response for this 
-# functionality.
-#
+(recommended for older Linuxes only)
+Automatically balance UDP traffic over auxiliary servers (if configured).
+The load balancing is using the ALTERNATE-SERVER mechanism.
+The TURN client must support 300 ALTERNATE-SERVER response for this 
+functionality.
 #udp-self-balance
 
 # Relay interface device for relay sockets (optional, Linux only).
@@ -85,40 +83,40 @@ If the value is missed, then it means 'true'.
 #
 #relay-device=eth1
 
-# Relay address (the local IP address that will be used to relay the 
-# packets to the peer).
-# Multiple relay addresses may be used.
-# The same IP(s) can be used as both listening IP(s) and relay IP(s).
-#
-# If no relay IP(s) specified, then the turnserver will apply the default
-# policy: it will decide itself which relay addresses to be used, and it 
-# will always be using the client socket IP address as the relay IP address
-# of the TURN session (if the requested relay address family is the same
-# as the family of the client socket).
-#
+ Relay address (the local IP address that will be used to relay the 
+ packets to the peer).
+ Multiple relay addresses may be used.
+ The same IP(s) can be used as both listening IP(s) and relay IP(s).
+
+ If no relay IP(s) specified, then the turnserver will apply the default
+ policy: it will decide itself which relay addresses to be used, and it 
+ will always be using the client socket IP address as the relay IP address
+ of the TURN session (if the requested relay address family is the same
+ as the family of the client socket).
+
 #relay-ip=172.17.19.105
 #relay-ip=2607:f0d0:1002:51::5
 
-# For Amazon EC2 users:
-#
-# TURN Server public/private address mapping, if the server is behind NAT.
-# In that situation, if a -X is used in form "-X <ip>" then that ip will be reported
-# as relay IP address of all allocations. This scenario works only in a simple case
-# when one single relay address is be used, and no RFC5780 functionality is required.
-# That single relay address must be mapped by NAT to the 'external' IP.
-# The "external-ip" value, if not empty, is returned in XOR-RELAYED-ADDRESS field.
-# For that 'external' IP, NAT must forward ports directly (relayed port 12345
-# must be always mapped to the same 'external' port 12345).
-#
-# In more complex case when more than one IP address is involved,
-# that option must be used several times, each entry must
-# have form "-X <public-ip/private-ip>", to map all involved addresses.
-# RFC5780 NAT discovery STUN functionality will work correctly,
-# if the addresses are mapped properly, even when the TURN server itself 
-# is behind A NAT.
-#
-# By default, this value is empty, and no address mapping is used.
-#
+ For Amazon EC2 users:
+
+ TURN Server public/private address mapping, if the server is behind NAT.
+ In that situation, if a -X is used in form "-X <ip>" then that ip will be reported
+ as relay IP address of all allocations. This scenario works only in a simple case
+ when one single relay address is be used, and no RFC5780 functionality is required.
+ That single relay address must be mapped by NAT to the 'external' IP.
+ The "external-ip" value, if not empty, is returned in XOR-RELAYED-ADDRESS field.
+ For that 'external' IP, NAT must forward ports directly (relayed port 12345
+ must be always mapped to the same 'external' port 12345).
+
+ In more complex case when more than one IP address is involved,
+ that option must be used several times, each entry must
+ have form "-X <public-ip/private-ip>", to map all involved addresses.
+ RFC5780 NAT discovery STUN functionality will work correctly,
+ if the addresses are mapped properly, even when the TURN server itself 
+ is behind A NAT.
+
+ By default, this value is empty, and no address mapping is used.
+
 #external-ip=60.70.80.91
 #
 #OR:
@@ -127,22 +125,19 @@ If the value is missed, then it means 'true'.
 #external-ip=60.70.80.92/172.17.19.102
 
 
-# Number of the relay threads to handle the established connections
-# (in addition to authentication thread and the listener thread).
-# If explicitly set to 0 then application runs relay process in a 
-# single thread, in the same thread with the listener process 
-# (the authentication thread will still be a separate thread).
-#
-# If this parameter is not set, then the default OS-dependent 
-# thread pattern algorithm will be employed. Usually the default
-# algorithm is the most optimal, so you have to change this option
-# only if you want to make some fine tweaks. 
-#
-# In the older systems (Linux kernel before 3.9),
-# the number of UDP threads is always one thread per network listening
-# endpoint - including the auxiliary endpoints - unless 0 (zero) or 
-# 1 (one) value is set.
-#
+Number of the relay threads to handle the established connections
+(in addition to authentication thread and the listener thread).
+If explicitly set to 0 then application runs relay process in a 
+single thread, in the same thread with the listener process 
+(the authentication thread will still be a separate thread).
+If this parameter is not set, then the default OS-dependent 
+thread pattern algorithm will be employed. Usually the default
+algorithm is the most optimal, so you have to change this option
+only if you want to make some fine tweaks. 
+In the older systems (Linux kernel before 3.9),
+the number of UDP threads is always one thread per network listening
+endpoint - including the auxiliary endpoints - unless 0 (zero) or 
+1 (one) value is set.
 #relay-threads=0
 
 # Lower and upper bounds of the UDP relay endpoints:
@@ -180,42 +175,42 @@ If the value is missed, then it means 'true'.
 #
 #no-auth
 
-# TURN REST API flag.
-# (Time Limited Long Term Credential)
-# Flag that sets a special authorization option that is based upon authentication secret.
-#
-# This feature's purpose is to support "TURN Server REST API", see
-# "TURN REST API" link in the project's page 
-# https://github.com/coturn/coturn/
-#
-# This option is used with timestamp:
-# 
-# usercombo -> "timestamp:userid"
-# turn user -> usercombo
-# turn password -> base64(hmac(secret key, usercombo))
-#
-# This allows TURN credentials to be accounted for a specific user id.
-# If you don't have a suitable id, the timestamp alone can be used.
-# This option is just turning on secret-based authentication.
-# The actual value of the secret is defined either by option static-auth-secret,
-# or can be found in the turn_secret table in the database (see below).
-# 
-# Read more about it:
-#  - https://tools.ietf.org/html/draft-uberti-behave-turn-rest-00
-#  - https://www.ietf.org/proceedings/87/slides/slides-87-behave-10.pdf
-#
-# Be aware that use-auth-secret overrides some part of lt-cred-mech.
-# Notice that this feature depends internally on lt-cred-mech, so if you set
-# use-auth-secret then it enables internally automatically lt-cred-mech option
-# like if you enable both.
-#
-# You can use only one of the to auth mechanisms in the same time because,
-# both mechanism use the username and password validation in different way.
-#
-# This way be aware that you can't use both auth mechnaism in the same time!
-# Use in config either the lt-cred-mech or the use-auth-secret
-# to avoid any confusion.
-#
+ TURN REST API flag.
+ (Time Limited Long Term Credential)
+ Flag that sets a special authorization option that is based upon authentication secret.
+
+ This feature's purpose is to support "TURN Server REST API", see
+ "TURN REST API" link in the project's page 
+ https://github.com/coturn/coturn/
+
+ This option is used with timestamp:
+ 
+ usercombo -> "timestamp:userid"
+ turn user -> usercombo
+ turn password -> base64(hmac(secret key, usercombo))
+
+ This allows TURN credentials to be accounted for a specific user id.
+ If you don't have a suitable id, the timestamp alone can be used.
+ This option is just turning on secret-based authentication.
+ The actual value of the secret is defined either by option static-auth-secret,
+ or can be found in the turn_secret table in the database (see below).
+ 
+ Read more about it:
+  - https://tools.ietf.org/html/draft-uberti-behave-turn-rest-00
+  - https://www.ietf.org/proceedings/87/slides/slides-87-behave-10.pdf
+
+ Be aware that use-auth-secret overrides some part of lt-cred-mech.
+ Notice that this feature depends internally on lt-cred-mech, so if you set
+ use-auth-secret then it enables internally automatically lt-cred-mech option
+ like if you enable both.
+
+ You can use only one of the to auth mechanisms in the same time because,
+ both mechanism use the username and password validation in different way.
+
+ This way be aware that you can't use both auth mechnaism in the same time!
+ Use in config either the lt-cred-mech or the use-auth-secret
+ to avoid any confusion.
+
 #use-auth-secret
 
 # 'Static' authentication secret value (a string) for TURN REST API only. 
